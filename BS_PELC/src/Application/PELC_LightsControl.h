@@ -67,6 +67,11 @@ typedef enum {
 	E_STOP_ACTIVE
 }STOP_CMD_STATE;
 
+
+extern MAIN_LIGHTS_CMD_STATE re_MainLightsCmdState;
+extern TURN_CMD_STATE re_TurnCmdState;
+extern HAZARD_CMD_STATE re_HazardCmdState;
+extern STOP_CMD_STATE re_StopCmdState; 
 /*==================================================*/ 
 /* Declaration of exported constants                */
 /*==================================================*/ 
@@ -109,12 +114,30 @@ typedef enum {
 
 #define PARKL_FL_PWMCH		0
 #define BLINKERL_FL_PWMCH	1
-#define PARKL_FR_PWMCH		0
-#define BLINKERL_FR_PWMCH	1
+#define PARKL_FR_PWMCH		2
+#define BLINKERL_FR_PWMCH	3
 #define PARKL_RL_PWMCH		4
-/*#define STOPL_RL_*/
+#define STOPL_RL_PWMCH		5
+#define PARKL_RR_PWMCH		6
+#define STOPL_RR_PWMCH		7
 
+#define PARKL_FL_PCR		0
+#define BLINKERL_FL_PCR		1
+#define PARKL_FR_PCR		2
+#define BLINKERL_FR_PCR		3
+#define PARKL_RL_PCR		4
+#define STOPL_RL_PCR		5
+#define PARKL_RR_PCR		6
+#define STOPL_RR_PCR		7
 
+#define HEADL_FL_PCR		34
+#define HEADL_FR_PCR		35
+#define BLINKERL_RL1		36
+#define BLINKERL_RL2		37
+#define BLINKERL_RL3		38
+#define BLINKERL_RR1		39
+#define BLINKERL_RR2		40
+#define BLINKERL_RR3		41
 
 #endif
 
