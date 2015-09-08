@@ -11,6 +11,7 @@
 /*******************************************************************************/
 
 #include "Can_Manager.h"
+#include "PELC_MessageCtrl.h"
 
 /* Temporary CAN Messages */
 /*uint8_t dummy_msg0[8] = {0xCA,0x83,0x15,0x77,0x19,0x56,0x65,0x00};
@@ -32,6 +33,8 @@ CAN_MessageDataType CanMessage_PduHandler2;
 void Can_Manager_PduHandler0(CAN_MessageDataType CanMessage)
 {
 	CanMessage_PduHandler0 = CanMessage;
+	
+	re_CANMsgHandlerState = E_MSG_RECEIVED;
 	
 	PduHandlerCnt0++;
 }
