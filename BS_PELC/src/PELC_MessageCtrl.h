@@ -27,6 +27,7 @@
 #define PELC_MESSAGE_CTRL_H
 
 /* Includes */
+#include "conti_typedefs.h"
 /* -------- */
 
 
@@ -77,7 +78,8 @@ extern CAN_MESSAGE_HANDLER_STATE re_CANMsgHandlerState;
 /* ---------------------------------------- */
 
 /* Functions prototypes */
-	extern void ECU_Process_Message(void);
+	extern void PELC_CmdMsgProcess (void);
+	extern void PELC_MsgSendStatus (T_UBYTE lub_DoorStat,T_UBYTE lub_HighB_Stat, T_UBYTE lub_BrakeStat);
 
 /* Functions macros */
 
@@ -88,5 +90,16 @@ extern CAN_MESSAGE_HANDLER_STATE re_CANMsgHandlerState;
 #define TURN_CMD 			0x03
 #define HAZARD_CMD 			0x04
 #define MAIN_LIGHT_CMD 		0x05
+
+#define ACTIVE_LIGHTS		0x0F
+#define INACTIVE_LIGHTS		0x00
+#define TURN_OFF 			0x01
+#define TURN_RIGHT 			0x0A
+#define TURN_LEFT 			0x0B
+
+#define MAINL_OFF			0x01
+#define MAINL_DAY			0x02
+#define MAINL_FULL			0x03
+#define MAINL_AUTO			0x04
 
 #endif
