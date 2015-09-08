@@ -34,6 +34,13 @@
 /* ---------------------------- */
 
 /* Types definition */
+typedef enum {
+	E_MSG_IDLE,
+	E_MSG_RECEIVED
+}CAN_MESSAGE_HANDLER_STATE;
+
+
+extern CAN_MESSAGE_HANDLER_STATE re_CANMsgHandlerState;
 /* typedef */
 
 
@@ -70,12 +77,16 @@
 /* ---------------------------------------- */
 
 /* Functions prototypes */
-
+	extern void ECU_Process_Message(void);
 
 /* Functions macros */
 
 
 /* Exported defines */
 
+#define STOP_CMD 			0x01
+#define TURN_CMD 			0x03
+#define HAZARD_CMD 			0x04
+#define MAIN_LIGHT_CMD 		0x05
 
 #endif

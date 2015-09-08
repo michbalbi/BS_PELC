@@ -32,9 +32,9 @@ CAN_DevBaudrateType bios_cnf_can_baudrate_options[] = {
 };
 
 CAN_ConfigMsgType bios_cnf_can_messages[] = {
-	{ 0, CNF_CAN_CH_RX, CNF_CAN_DATA_FRAME, CNF_CAN_IDE_STD, 0x1C2,         0x1FF,      Can_Manager_PduHandler0  },
+	{ 0, CNF_CAN_CH_RX, CNF_CAN_DATA_FRAME, CNF_CAN_IDE_STD, 0x05A,         0x1FF,      Can_Manager_PduHandler0  },
 	{ 1, CNF_CAN_CH_RX, CNF_CAN_DATA_FRAME, CNF_CAN_IDE_EXT, 0x12345600,    0x1FFFFFF8, NULL  },
-	{ 2, CNF_CAN_CH_TX, CNF_CAN_DATA_FRAME, CNF_CAN_IDE_STD, 0x1B0,         0x1FF,      Can_Manager_PduHandler2  },
+	{ 2, CNF_CAN_CH_TX, CNF_CAN_DATA_FRAME, CNF_CAN_IDE_STD, 0x204,         0x3FF,      Can_Manager_PduHandler2  },
 };
 
 

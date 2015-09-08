@@ -25,10 +25,13 @@
 
 /* Includes */
 	#include "PELC_MessageCtrl.h"
+	#include "typedefs.h"
+	#include "Can_Manager.h"
 /* -------- */
 
 
 /* Functions macros, constants, types and datas         */
+
 /* ---------------------------------------------------- */
 /* Functions macros */
 
@@ -55,7 +58,9 @@
 
 
 /* LONG and STRUCTURE RAM variables */
+CAN_MESSAGE_HANDLER_STATE re_CANMsgHandlerState = E_MSG_IDLE;
 
+/*CAN_PduType pdu_handler_ECU;*/
 
 /*======================================================*/ 
 /* close variable declaration sections                  */
@@ -104,3 +109,39 @@
  *  Critical/explanation :    [yes / No]
  **************************************************************/
 
+void ECU_Process_Message(void){
+	
+	T_UBYTE lub_CommandID = 0;
+	T_UBYTE lub_NumOfParameters = 0;
+	T_UBYTE laub_Data[3] = {0,0,0};
+	T_UBYTE lub_CheckSum = 0;
+	T_UBYTE lub_i;
+	
+	if(re_CANMsgHandlerState == E_MSG_RECEIVED){
+	
+		lub_CommandID = CanMessage_PduHandler0.msg_data_field[0];
+		lub_NumOfParameters = CanMessage_PduHandler0.msg_data_field[1];
+		lub_CheckSum = CanMessage_PduHandler0.msg_data_field[5];
+		
+		for(lub_i=0;lub_i<3;lub_i++){
+			laub_Data[lub_i] = CanMessage_PduHandler0.msg_data_field[lub_i+2];
+		}
+		
+		switch(lub_CommandID){
+			case STOP_CMD:
+				break;
+			
+			case TURN_CMD:
+				break;
+				
+			case HAZARD_CMD:
+				break;
+				
+			case MAIN_LIGHT_CMD:
+				break;
+				
+			default:
+				break;
+		}
+	}
+}
