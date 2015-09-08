@@ -127,7 +127,7 @@ void PELC_CmdMsgProcess(void){
 	
 	lub_ChSumExpctd = laub_Data[0]^laub_Data[1]^laub_Data[2];
 	
-	if((re_CANMsgHandlerState == E_MSG_RECEIVED) ||(lub_CheckSumRec == lub_ChSumExpctd)){
+	if((re_CANMsgHandlerState == E_MSG_RECEIVED) && (lub_CheckSumRec == lub_ChSumExpctd)){
 	
 		lub_CommandID = CanMessage_PduHandler0.msg_data_field[0];
 		lub_NumOfParamtrs = CanMessage_PduHandler0.msg_data_field[1];
