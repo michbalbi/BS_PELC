@@ -26,6 +26,7 @@
 /* Includes */
 #include "PELC_LightMeter.h"
 #include "MPC5606B_ADC_lib.h"
+#include "PELC_LightsControl.h"
 /* -------- */
 
 
@@ -107,9 +108,12 @@
 
 T_UWORD LightMeter_GetLightLevel (void){
 	
-	T_UWORD lub_adcMeasure;
+	static T_UWORD lub_adcMeasure = 0;
 	ADC_0_STARTCONVERSION();
-	while(ADC_0_ISDATAVALID(ADC_0_CHANNEL2) == 0) {};
-	lub_adcMeasure = (T_UWORD) ADC_0_GETDATA(ADC_0_CHANNEL2);
+	
+	if(ADC_0_ISDATAVALID(ADC_0_CHANNEL2) == 0) {
+		lub_adcMeasure = (T_UWORD) ADC_0_GETDATA(ADC_0_CHANNEL2);
+	}
+	
 	return lub_adcMeasure;
 }
