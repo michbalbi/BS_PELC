@@ -27,7 +27,7 @@
 
 /* Includes */
 /* -------- */
-
+#include "conti_typedefs.h"
 
 /* Exported types and constants */
 /* ---------------------------- */
@@ -49,18 +49,31 @@ typedef enum {
 }MAIN_LIGHTS_CMD_STATE;
 
 typedef enum {
-	E_TURN_INACTIVE,
-	E_TURN_ACTIVE_ON_RIGHT,
-	E_TURN_ACTIVE_OFF_RIGHT,
-	E_TURN_ACTIVE_ON_LEFT,
-	E_TURN_ACTIVE_OFF_LEFT
+	E_TURN_CMD_INACTIVE,
+	E_TURN_CMD_ACTIVE
 }TURN_CMD_STATE;
 
 typedef enum {
-	E_HAZARD_INACTIVE,
-	E_HAZARD_ACTIVE_ON,
-	E_HAZARD_ACTIVE_OFF
+	E_TURNL_INACTIVE,
+	E_TURNL_ACTIVE_ON,
+	E_TURNL_ACTIVE_OFF
+}TURNL_STATE;
+
+typedef enum{
+	E_TURN_RIGHT,
+	E_TURN_LEFT
+}TURN_CMD_SIDE;
+
+typedef enum {
+	E_HAZARD_CMD_INACTIVE,
+	E_HAZARD_CMD_ACTIVE
 }HAZARD_CMD_STATE;
+
+typedef enum {
+	E_HAZARDL_INACTIVE,
+	E_HAZARDL_ACTIVE_ON,
+	E_HAZARDL_ACTIVE_OFF
+}HAZARDL_STATE;
 
 typedef enum {
 	E_STOP_INACTIVE,
@@ -70,8 +83,13 @@ typedef enum {
 
 extern MAIN_LIGHTS_CMD_STATE re_MainLightsCmdState;
 extern TURN_CMD_STATE re_TurnCmdState;
+extern TURN_CMD_SIDE re_TurnCmdSide;
 extern HAZARD_CMD_STATE re_HazardCmdState;
-extern STOP_CMD_STATE re_StopCmdState; 
+extern STOP_CMD_STATE re_StopCmdState;
+extern T_UWORD ruw_TurnCmdOnTime;
+extern T_UWORD ruw_TurnCmdOffTime;
+extern T_UWORD ruw_HazardCmdOnTime;
+extern T_UWORD ruw_HazardCmdOffTime;
 /*==================================================*/ 
 /* Declaration of exported constants                */
 /*==================================================*/ 
@@ -132,12 +150,12 @@ extern STOP_CMD_STATE re_StopCmdState;
 
 #define HEADL_FL_PCR		34
 #define HEADL_FR_PCR		35
-#define BLINKERL_RL1		36
-#define BLINKERL_RL2		37
-#define BLINKERL_RL3		38
-#define BLINKERL_RR1		39
-#define BLINKERL_RR2		40
-#define BLINKERL_RR3		41
+#define BLINKERL_RL1_PCR	36
+#define BLINKERL_RL2_PCR	37
+#define BLINKERL_RL3_PCR	38
+#define BLINKERL_RR1_PCR	39
+#define BLINKERL_RR2_PCR	40
+#define BLINKERL_RR3_PCR	41
 
 #endif
 
