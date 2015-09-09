@@ -122,6 +122,8 @@ void PELC_CmdMsgProcess(void){
 	T_UBYTE lub_i;
 	T_UBYTE lub_ChSumExpctd;
 	
+	lub_NumOfParamtrs = CanMessage_PduHandler0.msg_data_field[1];
+	
 	for(lub_i=0;lub_i<lub_NumOfParamtrs;lub_i++){
 			laub_Data[lub_i] = CanMessage_PduHandler0.msg_data_field[lub_i+2];
 	}
@@ -131,7 +133,6 @@ void PELC_CmdMsgProcess(void){
 	if((re_CANMsgHandlerState == E_MSG_RECEIVED) && (lub_CheckSumRec == lub_ChSumExpctd)){
 	
 		lub_CommandID = CanMessage_PduHandler0.msg_data_field[0];
-		lub_NumOfParamtrs = CanMessage_PduHandler0.msg_data_field[1];
 		
 		switch(lub_CommandID){
 			case STOP_CMD: 
@@ -145,17 +146,19 @@ void PELC_CmdMsgProcess(void){
 			
 			case TURN_CMD:
 					switch(laub_Data[0]){
-						case TURN_OFF: re_TurnCmdState = E_TURN_INACTIVE;
+						case TURN_OFF: re_TurnCmdState = E_TURN_CMD_INACTIVE;
 							break;
 							
-						case TURN_RIGHT: re_TurnCmdState = E_TURN_ACTIVE_ON_RIGHT;
-								/*VARIABLE_MULTIPLO_ON = laub_Data[1] */
-					 			/*VARIABLE_MULTIPLO_OFF = laub_Data[2] */
+						case TURN_RIGHT: re_TurnCmdState = E_TURN_CMD_ACTIVE;
+								re_TurnCmdSide = E_TURN_RIGHT;
+								ruw_TurnCmdOnTime = laub_Data[1];
+					 			ruw_TurnCmdOffTime = laub_Data[2];
 							break;
 							
-						case TURN_LEFT: re_TurnCmdState = E_TURN_ACTIVE_ON_LEFT;
-								/*VARIABLE_MULTIPLO_ON = laub_Data[1] */
-					 			/*VARIABLE_MULTIPLO_OFF = laub_Data[2] */
+						case TURN_LEFT: re_TurnCmdState = E_TURN_CMD_ACTIVE;
+								re_TurnCmdSide = E_TURN_LEFT;
+								ruw_TurnCmdOnTime = laub_Data[1];
+					 			ruw_TurnCmdOffTime = laub_Data[2];
 							break;
 							
 						default:
@@ -167,12 +170,12 @@ void PELC_CmdMsgProcess(void){
 				
 			case HAZARD_CMD:
 					if(laub_Data[0] == INACTIVE_LIGHTS){
-						re_HazardCmdState = E_HAZARD_INACTIVE;
+						re_HazardCmdState = E_HAZARD_CMD_INACTIVE;
 					}
 					else if(laub_Data[0] == ACTIVE_LIGHTS){
-						re_HazardCmdState = E_HAZARD_ACTIVE_ON;
-						/*VARIABLE_MULTIPLO_ON = laub_Data[1] */
-						/*VARIABLE_MULTIPLO_OFF = laub_Data[2] */
+						re_HazardCmdState = E_HAZARD_CMD_ACTIVE;
+						ruw_TurnCmdOnTime = laub_Data[1];
+					 	ruw_TurnCmdOffTime = laub_Data[2];
 					}
 				break;
 				
@@ -190,7 +193,7 @@ void PELC_CmdMsgProcess(void){
 						case MAINL_AUTO: re_MainLightsCmdState = E_AUTO;
 							break;
 							
-						default:
+						default: /*Do nothing*/
 							break;
 					} /*End MAIN_LIGHT_CMD*/
 				break;
