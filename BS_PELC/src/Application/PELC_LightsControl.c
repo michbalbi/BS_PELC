@@ -140,9 +140,9 @@ void PELC_TurnOnLevel(T_UBYTE lub_pcr, T_UBYTE lub_Channel, T_UBYTE lub_DutyCycl
 	PWM_Channel_Set(lub_Channel, lub_DutyCycle, lub_Freq);
 }
 
-void PELC_TurnOnFullHazardLights(HW_CONFIG le_HWConfig){
+/*void PELC_TurnOnFullHazardLights(HW_CONFIG le_HWConfig){
 	
-}
+}*/
 
 void PELC_SetHazardCmd(void){
 	
@@ -220,7 +220,7 @@ void PELC_SetTurnCmd(void){
 
 void PELC_SetStdLights(void){
 
-	switch(re_HazardCmdState){
+	switch(re_HazardLState){
 		
 		case E_HAZARDL_ACTIVE_ON:
 			PELC_TurnOnFull(PARKL_FL_PCR);
@@ -320,7 +320,7 @@ void PELC_SetStdLights(void){
 		
 		case E_HAZARDL_INACTIVE:
 			
-			switch(re_TurnCmdState){
+			switch(re_TurnLState){
 				
 				case E_TURNL_ACTIVE_ON:
 					
@@ -438,6 +438,8 @@ void PELC_SetStdLights(void){
 		case E_STOP_ACTIVE:
 			PELC_TurnOnFull(PARKL_RL_PCR);
 			PELC_TurnOnFull(PARKL_RR_PCR);
+			PELC_TurnOnFull(STOPL_RL_PCR);
+			PELC_TurnOnFull(STOPL_RR_PCR);
 			break;
 		
 		case E_STOP_INACTIVE:
@@ -447,16 +449,22 @@ void PELC_SetStdLights(void){
 				case E_OFF:
 					PELC_TurnOff(PARKL_RL_PCR);
 					PELC_TurnOff(PARKL_RR_PCR);
+					PELC_TurnOff(STOPL_RL_PCR);
+					PELC_TurnOff(STOPL_RR_PCR);
 					break;
 					
 				case E_DAY:
 					PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
 					PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
+					PELC_TurnOnLevel(STOPL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
+					PELC_TurnOnLevel(STOPL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
 					break;
 					
 				case E_FULL:
 					PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
 					PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
+					PELC_TurnOnLevel(STOPL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
+					PELC_TurnOnLevel(STOPL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
 					break;
 					
 				case E_AUTO:
@@ -464,16 +472,22 @@ void PELC_SetStdLights(void){
 						if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_NIGHT_THR){
 							PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
 							PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
+							PELC_TurnOnLevel(STOPL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
+							PELC_TurnOnLevel(STOPL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
 						}
 						
 						if(ruw_LightLevel>=LIGHT_NIGHT_THR && ruw_LightLevel<LIGHT_AFT_THR){
 							PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
 							PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
+							PELC_TurnOnLevel(STOPL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
+							PELC_TurnOnLevel(STOPL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
 						}
 						
 						if(ruw_LightLevel>=LIGHT_AFT_THR && ruw_LightLevel<=LIGHT_MAX_THR){
 							PELC_TurnOff(PARKL_RL_PCR);
 							PELC_TurnOff(PARKL_RR_PCR);
+							PELC_TurnOff(STOPL_RL_PCR);
+							PELC_TurnOff(STOPL_RR_PCR);
 						}
 						
 					} else if(ruw_LightLevel >= ruw_LightLevelPrev){
@@ -481,20 +495,83 @@ void PELC_SetStdLights(void){
 						if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_DAWN_THR){
 							PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
 							PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
+							PELC_TurnOnLevel(STOPL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
+							PELC_TurnOnLevel(STOPL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
 						}
 						
 						if(ruw_LightLevel>=LIGHT_DAWN_THR && ruw_LightLevel<LIGHT_DAY_THR){
 							PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
 							PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
+							PELC_TurnOnLevel(STOPL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
+							PELC_TurnOnLevel(STOPL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
 						}
 						
 						if(ruw_LightLevel>=LIGHT_DAY_THR && ruw_LightLevel<=LIGHT_MAX_THR){
 							PELC_TurnOff(PARKL_RL_PCR);
 							PELC_TurnOff(PARKL_RR_PCR);
+							PELC_TurnOff(STOPL_RL_PCR);
+							PELC_TurnOff(STOPL_RR_PCR);
 						}
 					}
 					break;
 				
+			}
+			break;
+		
+		default:
+			break;
+	}
+	
+	switch(re_MainLightsCmdState){
+	
+		case E_OFF:
+			PELC_TurnOff(HEADL_FL_PCR);
+			PELC_TurnOff(HEADL_FR_PCR);
+			break;
+			
+		case E_DAY:
+			PELC_TurnOff(HEADL_FL_PCR);
+			PELC_TurnOff(HEADL_FR_PCR);
+			break;
+			
+		case E_FULL:
+			PELC_TurnOnFull(HEADL_FL_PCR);
+			PELC_TurnOnFull(HEADL_FR_PCR);
+			break;
+			
+		case E_AUTO:
+			if(ruw_LightLevel < ruw_LightLevelPrev){
+				if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_NIGHT_THR){
+					PELC_TurnOnFull(HEADL_FL_PCR);
+					PELC_TurnOnFull(HEADL_FR_PCR);			
+				}
+				
+				if(ruw_LightLevel>=LIGHT_NIGHT_THR && ruw_LightLevel<LIGHT_AFT_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+				}
+				
+				if(ruw_LightLevel>=LIGHT_AFT_THR && ruw_LightLevel<=LIGHT_MAX_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);					
+				}
+				
+			} else if(ruw_LightLevel >= ruw_LightLevelPrev){
+			
+				if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_DAWN_THR){
+					PELC_TurnOnFull(HEADL_FL_PCR);
+					PELC_TurnOnFull(HEADL_FR_PCR);
+				}
+				
+				if(ruw_LightLevel>=LIGHT_DAWN_THR && ruw_LightLevel<LIGHT_DAY_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+				}
+				
+				if(ruw_LightLevel>=LIGHT_DAY_THR && ruw_LightLevel<=LIGHT_MAX_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+				}
 			}
 			break;
 		
@@ -507,7 +584,7 @@ void PELC_SetStdLights(void){
 
 void PELC_SetHighEndLights(void){
 
-	switch(re_HazardCmdState){
+	switch(re_HazardLState){
 		
 		case E_HAZARDL_ACTIVE_ON:
 			/*PELC_TurnOnFull(PARKL_FL_PCR);
@@ -522,81 +599,9 @@ void PELC_SetHighEndLights(void){
 			PELC_TurnOnFull(BLINKERL_RR3_PCR);
 			break;
 		
-		case E_HAZARDL_ACTIVE_OFF:
-			
-			switch(re_MainLightsCmdState){
-				
-				case E_OFF:
-					PELC_TurnOff(PARKL_FL_PCR);
-					PELC_TurnOff(PARKL_FR_PCR);
-					PELC_TurnOff(BLINKERL_FL_PCR);
-					PELC_TurnOff(BLINKERL_FR_PCR);
-					break;
-					
-				case E_DAY:
-					PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-					PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-					PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-					PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-					break;
-					
-				case E_FULL:
-					PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-					PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-					PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-					PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-					break;
-					
-				case E_AUTO:
-					if(ruw_LightLevel < ruw_LightLevelPrev){
-						if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_NIGHT_THR){
-							PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-						}
-						
-						if(ruw_LightLevel>=LIGHT_NIGHT_THR && ruw_LightLevel<LIGHT_AFT_THR){
-							PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-						}
-						
-						if(ruw_LightLevel>=LIGHT_AFT_THR && ruw_LightLevel<=LIGHT_MAX_THR){
-							PELC_TurnOff(PARKL_FL_PCR);
-							PELC_TurnOff(PARKL_FR_PCR);
-							PELC_TurnOff(BLINKERL_FL_PCR);
-							PELC_TurnOff(BLINKERL_FR_PCR);
-						}
-						
-					} else if(ruw_LightLevel >= ruw_LightLevelPrev){
-					
-						if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_DAWN_THR){
-							PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-						}
-						
-						if(ruw_LightLevel>=LIGHT_DAWN_THR && ruw_LightLevel<LIGHT_DAY_THR){
-							PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-						}
-						
-						if(ruw_LightLevel>=LIGHT_DAY_THR && ruw_LightLevel<=LIGHT_MAX_THR){
-							PELC_TurnOff(PARKL_FL_PCR);
-							PELC_TurnOff(PARKL_FR_PCR);
-							PELC_TurnOff(BLINKERL_FL_PCR);
-							PELC_TurnOff(BLINKERL_FR_PCR);
-						}
-					}
-					break;
-				
-			}		
-			
+		case E_HAZARDL_ACTIVE_OFF:			
+			PELC_TurnOff(BLINKERL_FL_PCR);
+			PELC_TurnOff(BLINKERL_FR_PCR);
 			PELC_TurnOff(BLINKERL_RL1_PCR);
 			PELC_TurnOff(BLINKERL_RL2_PCR);
 			PELC_TurnOff(BLINKERL_RL3_PCR);
@@ -607,18 +612,18 @@ void PELC_SetHighEndLights(void){
 		
 		case E_HAZARDL_INACTIVE:
 			
-			switch(re_TurnCmdState){
+			switch(re_TurnLState){
 				
 				case E_TURNL_ACTIVE_ON:
 					
 					if(re_TurnCmdSide == E_TURN_RIGHT){
-						PELC_TurnOnFull(PARKL_FR_PCR);
+						/*PELC_TurnOnFull(PARKL_FR_PCR);*/
 						PELC_TurnOnFull(BLINKERL_FR_PCR);
 						PELC_TurnOnFull(BLINKERL_RR1_PCR);
 						PELC_TurnOnFull(BLINKERL_RR2_PCR);
 						PELC_TurnOnFull(BLINKERL_RR3_PCR);
 					}else{
-						PELC_TurnOnFull(PARKL_FL_PCR);
+						/*PELC_TurnOnFull(PARKL_FL_PCR);*/
 						PELC_TurnOnFull(BLINKERL_FL_PCR);
 						PELC_TurnOnFull(BLINKERL_RL1_PCR);
 						PELC_TurnOnFull(BLINKERL_RL2_PCR);
@@ -627,80 +632,8 @@ void PELC_SetHighEndLights(void){
 					break;
 					
 				case E_TURNL_ACTIVE_OFF:
-					
-					switch(re_MainLightsCmdState){
-				
-						case E_OFF:
-							PELC_TurnOff(PARKL_FL_PCR);
-							PELC_TurnOff(PARKL_FR_PCR);
-							PELC_TurnOff(BLINKERL_FL_PCR);
-							PELC_TurnOff(BLINKERL_FR_PCR);
-							break;
-							
-						case E_DAY:
-							PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-							break;
-							
-						case E_FULL:
-							PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-							break;
-							
-						case E_AUTO:
-							if(ruw_LightLevel < ruw_LightLevelPrev){
-								if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_NIGHT_THR){
-									PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-									PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-									PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-									PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-								}
-								
-								if(ruw_LightLevel>=LIGHT_NIGHT_THR && ruw_LightLevel<LIGHT_AFT_THR){
-									PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-									PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-									PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-									PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-								}
-								
-								if(ruw_LightLevel>=LIGHT_AFT_THR && ruw_LightLevel<=LIGHT_MAX_THR){
-									PELC_TurnOff(PARKL_FL_PCR);
-									PELC_TurnOff(PARKL_FR_PCR);
-									PELC_TurnOff(BLINKERL_FL_PCR);
-									PELC_TurnOff(BLINKERL_FR_PCR);
-								}
-								
-							} else if(ruw_LightLevel >= ruw_LightLevelPrev){
-							
-								if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_DAWN_THR){
-									PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-									PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-									PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-									PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-								}
-								
-								if(ruw_LightLevel>=LIGHT_DAWN_THR && ruw_LightLevel<LIGHT_DAY_THR){
-									PELC_TurnOnLevel(PARKL_FL_PCR, PARKL_FL_PWMCH, 20, 63);
-									PELC_TurnOnLevel(PARKL_FR_PCR, PARKL_FR_PWMCH, 20, 63);
-									PELC_TurnOnLevel(BLINKERL_FL_PCR, BLINKERL_FL_PWMCH, 20, 63);
-									PELC_TurnOnLevel(BLINKERL_FR_PCR, BLINKERL_FR_PWMCH, 20, 63);
-								}
-								
-								if(ruw_LightLevel>=LIGHT_DAY_THR && ruw_LightLevel<=LIGHT_MAX_THR){
-									PELC_TurnOff(PARKL_FL_PCR);
-									PELC_TurnOff(PARKL_FR_PCR);
-									PELC_TurnOff(BLINKERL_FL_PCR);
-									PELC_TurnOff(BLINKERL_FR_PCR);
-								}
-							}
-							break;
-						
-					}		
-					
+					PELC_TurnOff(BLINKERL_FR_PCR);
+					PELC_TurnOff(BLINKERL_FL_PCR);				
 					PELC_TurnOff(BLINKERL_RL1_PCR);
 					PELC_TurnOff(BLINKERL_RL2_PCR);
 					PELC_TurnOff(BLINKERL_RL3_PCR);
@@ -710,6 +643,14 @@ void PELC_SetHighEndLights(void){
 					break;
 				
 				case E_TURNL_INACTIVE:
+					PELC_TurnOff(BLINKERL_FR_PCR);
+					PELC_TurnOff(BLINKERL_FL_PCR);				
+					PELC_TurnOff(BLINKERL_RL1_PCR);
+					PELC_TurnOff(BLINKERL_RL2_PCR);
+					PELC_TurnOff(BLINKERL_RL3_PCR);
+					PELC_TurnOff(BLINKERL_RR1_PCR);
+					PELC_TurnOff(BLINKERL_RR2_PCR);
+					PELC_TurnOff(BLINKERL_RR3_PCR);
 					break;
 				
 			}
@@ -720,68 +661,108 @@ void PELC_SetHighEndLights(void){
 			break;
 	}
 	
-	switch(re_StopCmdState){
+	switch(re_StopCmdState){ /* Stop cmd is controlled directly */
 	
 		case E_STOP_ACTIVE:
-			PELC_TurnOnFull(PARKL_RL_PCR);
-			PELC_TurnOnFull(PARKL_RR_PCR);
+			PELC_TurnOnFull(STOPL_RL_PCR);
+			PELC_TurnOnFull(STOPL_RR_PCR);
 			break;
 		
 		case E_STOP_INACTIVE:
+			PELC_TurnOff(STOPL_RL_PCR);
+			PELC_TurnOff(STOPL_RR_PCR);			
+			break;
+		
+		default:
+			break;
+	}
+	
+	switch(re_MainLightsCmdState){
+	
+		case E_OFF:
+			PELC_TurnOff(HEADL_FL_PCR);
+			PELC_TurnOff(HEADL_FR_PCR);
+			PELC_TurnOff(PARKL_FR_PCR);
+			PELC_TurnOff(PARKL_FL_PCR);
+			PELC_TurnOff(PARKL_RR_PCR);
+			PELC_TurnOff(PARKL_RL_PCR);
+			break;
 			
-			switch(re_MainLightsCmdState){
+		case E_DAY:
+			PELC_TurnOff(HEADL_FL_PCR);
+			PELC_TurnOff(HEADL_FR_PCR);
+			PELC_TurnOnFull(PARKL_FR_PCR);
+			PELC_TurnOnFull(PARKL_FL_PCR);
+			PELC_TurnOnFull(PARKL_RR_PCR);
+			PELC_TurnOnFull(PARKL_RL_PCR);
+			break;
+			
+		case E_FULL:
+			PELC_TurnOnFull(HEADL_FL_PCR);
+			PELC_TurnOnFull(HEADL_FR_PCR);
+			PELC_TurnOnFull(PARKL_FR_PCR);
+			PELC_TurnOnFull(PARKL_FL_PCR);
+			PELC_TurnOnFull(PARKL_RR_PCR);
+			PELC_TurnOnFull(PARKL_RL_PCR);
+			break;
+			
+		case E_AUTO:
+			if(ruw_LightLevel < ruw_LightLevelPrev){
+				if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_NIGHT_THR){
+					PELC_TurnOnFull(HEADL_FL_PCR);
+					PELC_TurnOnFull(HEADL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FL_PCR);
+					PELC_TurnOnFull(PARKL_RR_PCR);
+					PELC_TurnOnFull(PARKL_RL_PCR);			
+				}
 				
-				case E_OFF:
-					PELC_TurnOff(PARKL_RL_PCR);
+				if(ruw_LightLevel>=LIGHT_NIGHT_THR && ruw_LightLevel<LIGHT_AFT_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FL_PCR);
+					PELC_TurnOnFull(PARKL_RR_PCR);
+					PELC_TurnOnFull(PARKL_RL_PCR);
+				}
+				
+				if(ruw_LightLevel>=LIGHT_AFT_THR && ruw_LightLevel<=LIGHT_MAX_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+					PELC_TurnOff(PARKL_FR_PCR);
+					PELC_TurnOff(PARKL_FL_PCR);
 					PELC_TurnOff(PARKL_RR_PCR);
-					break;
-					
-				case E_DAY:
-					PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
-					PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
-					break;
-					
-				case E_FULL:
-					PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
-					PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
-					break;
-					
-				case E_AUTO:
-					if(ruw_LightLevel < ruw_LightLevelPrev){
-						if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_NIGHT_THR){
-							PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
-						}
-						
-						if(ruw_LightLevel>=LIGHT_NIGHT_THR && ruw_LightLevel<LIGHT_AFT_THR){
-							PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
-						}
-						
-						if(ruw_LightLevel>=LIGHT_AFT_THR && ruw_LightLevel<=LIGHT_MAX_THR){
-							PELC_TurnOff(PARKL_RL_PCR);
-							PELC_TurnOff(PARKL_RR_PCR);
-						}
-						
-					} else if(ruw_LightLevel >= ruw_LightLevelPrev){
-					
-						if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_DAWN_THR){
-							PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
-						}
-						
-						if(ruw_LightLevel>=LIGHT_DAWN_THR && ruw_LightLevel<LIGHT_DAY_THR){
-							PELC_TurnOnLevel(PARKL_RL_PCR, PARKL_RL_PWMCH, 20, 63);
-							PELC_TurnOnLevel(PARKL_RR_PCR, PARKL_RR_PWMCH, 20, 63);
-						}
-						
-						if(ruw_LightLevel>=LIGHT_DAY_THR && ruw_LightLevel<=LIGHT_MAX_THR){
-							PELC_TurnOff(PARKL_RL_PCR);
-							PELC_TurnOff(PARKL_RR_PCR);
-						}
-					}
-					break;
+					PELC_TurnOff(PARKL_RL_PCR);					
+				}
 				
+			} else if(ruw_LightLevel >= ruw_LightLevelPrev){
+			
+				if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_DAWN_THR){
+					PELC_TurnOnFull(HEADL_FL_PCR);
+					PELC_TurnOnFull(HEADL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FL_PCR);
+					PELC_TurnOnFull(PARKL_RR_PCR);
+					PELC_TurnOnFull(PARKL_RL_PCR);
+				}
+				
+				if(ruw_LightLevel>=LIGHT_DAWN_THR && ruw_LightLevel<LIGHT_DAY_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FL_PCR);
+					PELC_TurnOnFull(PARKL_RR_PCR);
+					PELC_TurnOnFull(PARKL_RL_PCR);
+				}
+				
+				if(ruw_LightLevel>=LIGHT_DAY_THR && ruw_LightLevel<=LIGHT_MAX_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+					PELC_TurnOff(PARKL_FR_PCR);
+					PELC_TurnOff(PARKL_FL_PCR);
+					PELC_TurnOff(PARKL_RR_PCR);
+					PELC_TurnOff(PARKL_RL_PCR);
+				}
 			}
 			break;
 		
@@ -791,6 +772,200 @@ void PELC_SetHighEndLights(void){
 	
 }
 
+
+void PELC_SetLuxuryLights(void){
+
+	switch(re_HazardLState){
+		
+		case E_HAZARDL_ACTIVE_ON:
+			/*PELC_TurnOnFull(PARKL_FL_PCR);
+			PELC_TurnOnFull(PARKL_FR_PCR);*/
+			PELC_TurnOnFull(BLINKERL_FL_PCR);
+			PELC_TurnOnFull(BLINKERL_FR_PCR);
+			PELC_TurnOnFull(BLINKERL_RL1_PCR);
+			PELC_TurnOnFull(BLINKERL_RL2_PCR);
+			PELC_TurnOnFull(BLINKERL_RL3_PCR);
+			PELC_TurnOnFull(BLINKERL_RR1_PCR);
+			PELC_TurnOnFull(BLINKERL_RR2_PCR);
+			PELC_TurnOnFull(BLINKERL_RR3_PCR);
+			break;
+		
+		case E_HAZARDL_ACTIVE_OFF:			
+			PELC_TurnOff(BLINKERL_FL_PCR);
+			PELC_TurnOff(BLINKERL_FR_PCR);
+			PELC_TurnOff(BLINKERL_RL1_PCR);
+			PELC_TurnOff(BLINKERL_RL2_PCR);
+			PELC_TurnOff(BLINKERL_RL3_PCR);
+			PELC_TurnOff(BLINKERL_RR1_PCR);
+			PELC_TurnOff(BLINKERL_RR2_PCR);
+			PELC_TurnOff(BLINKERL_RR3_PCR);	
+			break;
+		
+		case E_HAZARDL_INACTIVE:
+			
+			switch(re_TurnLState){
+				/* 
+				
+				Remember luxury will use rotabit
+				
+				*/
+				case E_TURNL_ACTIVE_ON:
+					
+					if(re_TurnCmdSide == E_TURN_RIGHT){
+						/*PELC_TurnOnFull(PARKL_FR_PCR);*/
+						PELC_TurnOnFull(BLINKERL_FR_PCR);
+						PELC_TurnOnFull(BLINKERL_RR1_PCR);
+						PELC_TurnOnFull(BLINKERL_RR2_PCR);
+						PELC_TurnOnFull(BLINKERL_RR3_PCR);
+					}else{
+						/*PELC_TurnOnFull(PARKL_FL_PCR);*/
+						PELC_TurnOnFull(BLINKERL_FL_PCR);
+						PELC_TurnOnFull(BLINKERL_RL1_PCR);
+						PELC_TurnOnFull(BLINKERL_RL2_PCR);
+						PELC_TurnOnFull(BLINKERL_RL3_PCR);
+					}
+					break;
+					
+				case E_TURNL_ACTIVE_OFF:
+					PELC_TurnOff(BLINKERL_FR_PCR);
+					PELC_TurnOff(BLINKERL_FL_PCR);				
+					PELC_TurnOff(BLINKERL_RL1_PCR);
+					PELC_TurnOff(BLINKERL_RL2_PCR);
+					PELC_TurnOff(BLINKERL_RL3_PCR);
+					PELC_TurnOff(BLINKERL_RR1_PCR);
+					PELC_TurnOff(BLINKERL_RR2_PCR);
+					PELC_TurnOff(BLINKERL_RR3_PCR);					
+					break;
+				
+				case E_TURNL_INACTIVE:
+					PELC_TurnOff(BLINKERL_FR_PCR);
+					PELC_TurnOff(BLINKERL_FL_PCR);				
+					PELC_TurnOff(BLINKERL_RL1_PCR);
+					PELC_TurnOff(BLINKERL_RL2_PCR);
+					PELC_TurnOff(BLINKERL_RL3_PCR);
+					PELC_TurnOff(BLINKERL_RR1_PCR);
+					PELC_TurnOff(BLINKERL_RR2_PCR);
+					PELC_TurnOff(BLINKERL_RR3_PCR);
+					break;
+				
+			}
+			
+			break;
+		
+		default:
+			break;
+	}
+	
+	switch(re_StopCmdState){ /* Stop cmd is controlled directly */
+	
+		case E_STOP_ACTIVE:
+			PELC_TurnOnFull(STOPL_RL_PCR);
+			PELC_TurnOnFull(STOPL_RR_PCR);
+			break;
+		
+		case E_STOP_INACTIVE:
+			PELC_TurnOff(STOPL_RL_PCR);
+			PELC_TurnOff(STOPL_RR_PCR);			
+			break;
+		
+		default:
+			break;
+	}
+	
+	switch(re_MainLightsCmdState){
+	
+		case E_OFF:
+			PELC_TurnOff(HEADL_FL_PCR);
+			PELC_TurnOff(HEADL_FR_PCR);
+			PELC_TurnOff(PARKL_FR_PCR);
+			PELC_TurnOff(PARKL_FL_PCR);
+			PELC_TurnOff(PARKL_RR_PCR);
+			PELC_TurnOff(PARKL_RL_PCR);
+			break;
+			
+		case E_DAY:
+			PELC_TurnOff(HEADL_FL_PCR);
+			PELC_TurnOff(HEADL_FR_PCR);
+			PELC_TurnOnFull(PARKL_FR_PCR);
+			PELC_TurnOnFull(PARKL_FL_PCR);
+			PELC_TurnOnFull(PARKL_RR_PCR);
+			PELC_TurnOnFull(PARKL_RL_PCR);
+			break;
+			
+		case E_FULL:
+			PELC_TurnOnFull(HEADL_FL_PCR);
+			PELC_TurnOnFull(HEADL_FR_PCR);
+			PELC_TurnOnFull(PARKL_FR_PCR);
+			PELC_TurnOnFull(PARKL_FL_PCR);
+			PELC_TurnOnFull(PARKL_RR_PCR);
+			PELC_TurnOnFull(PARKL_RL_PCR);
+			break;
+			
+		case E_AUTO:
+			if(ruw_LightLevel < ruw_LightLevelPrev){
+				if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_NIGHT_THR){
+					PELC_TurnOnFull(HEADL_FL_PCR);
+					PELC_TurnOnFull(HEADL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FL_PCR);
+					PELC_TurnOnFull(PARKL_RR_PCR);
+					PELC_TurnOnFull(PARKL_RL_PCR);			
+				}
+				
+				if(ruw_LightLevel>=LIGHT_NIGHT_THR && ruw_LightLevel<LIGHT_AFT_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FL_PCR);
+					PELC_TurnOnFull(PARKL_RR_PCR);
+					PELC_TurnOnFull(PARKL_RL_PCR);
+				}
+				
+				if(ruw_LightLevel>=LIGHT_AFT_THR && ruw_LightLevel<=LIGHT_MAX_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+					PELC_TurnOff(PARKL_FR_PCR);
+					PELC_TurnOff(PARKL_FL_PCR);
+					PELC_TurnOff(PARKL_RR_PCR);
+					PELC_TurnOff(PARKL_RL_PCR);					
+				}
+				
+			} else if(ruw_LightLevel >= ruw_LightLevelPrev){
+			
+				if(ruw_LightLevel>=LIGHT_MIN_THR && ruw_LightLevel<LIGHT_DAWN_THR){
+					PELC_TurnOnFull(HEADL_FL_PCR);
+					PELC_TurnOnFull(HEADL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FL_PCR);
+					PELC_TurnOnFull(PARKL_RR_PCR);
+					PELC_TurnOnFull(PARKL_RL_PCR);
+				}
+				
+				if(ruw_LightLevel>=LIGHT_DAWN_THR && ruw_LightLevel<LIGHT_DAY_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FR_PCR);
+					PELC_TurnOnFull(PARKL_FL_PCR);
+					PELC_TurnOnFull(PARKL_RR_PCR);
+					PELC_TurnOnFull(PARKL_RL_PCR);
+				}
+				
+				if(ruw_LightLevel>=LIGHT_DAY_THR && ruw_LightLevel<=LIGHT_MAX_THR){
+					PELC_TurnOff(HEADL_FL_PCR);
+					PELC_TurnOff(HEADL_FR_PCR);
+					PELC_TurnOff(PARKL_FR_PCR);
+					PELC_TurnOff(PARKL_FL_PCR);
+					PELC_TurnOff(PARKL_RR_PCR);
+					PELC_TurnOff(PARKL_RL_PCR);
+				}
+			}
+			break;
+		
+		default:
+			break;
+	}
+	
+}
 
 /*
 Sch Tasks are 1.25, 5, 10 and 40MS
@@ -799,27 +974,58 @@ void PELC_Task_1P25MS(void){
 	
 }
 
+void PELC_SendStatus_100MS(void){
+	/*PELC_MsgSendStatus();*/
+}
+
+void PELC_GroupedTasks_100MS(void){
+	static T_UBYTE lub_Counter = 0;
+	
+	lub_Counter++;
+	
+	if(lub_Counter == 10){
+		
+		PELC_SetHazardCmd();
+		PELC_SetTurnCmd();
+		
+		switch(re_HWConfig){
+			case E_STD:
+				PELC_SetStdLights();
+				break;
+			
+			case E_HIGH:
+				PELC_SetHighEndLights();
+				break;
+				
+			case E_LUX:
+				PELC_SetLuxuryLights();
+				break;
+				
+			default:
+				break;
+		}
+		
+		PELC_SendStatus_100MS();
+		lub_Counter = 0;
+	}
+}
+
 void PELC_ChkMsg_5MS(void){
 	if(re_CANMsgHandlerState == E_MSG_RECEIVED){
 		PELC_CmdMsgProcess();
 	}
 }
 
-void PELC_MainLightsSwitch_100MS(void){
-	
-}
-
-void PELC_StopLightSwitch_100MS(void){
-	
-}
-
-void PELC_SendStatus_100MS(void){
-	/*PELC_MsgSendStatus();*/
-}
-
 void PELC_GetLightLevel_500MS(void){
 	
-	ruw_LightLevelPrev = ruw_LightLevel;
-	ruw_LightLevel = (T_UWORD)LightMeter_GetLightLevel();
+	static T_UBYTE lub_Counter = 0;
+	
+	lub_Counter++;
+	
+	if(lub_Counter == 50){
+		ruw_LightLevelPrev = ruw_LightLevel;
+		ruw_LightLevel = (T_UWORD)LightMeter_GetLightLevel();
+		lub_Counter = 0;
+	}
 	
 }
